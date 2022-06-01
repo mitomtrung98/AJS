@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="angular.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body ng-app="myApp">
+<div ng-controller="MathController">
+  <p>Menu:</p><select ng-options="dependant for dependant in dependants" ng-model="selectedD" ng-init = "true"></select>
+  <p>Size: </p>
+  <select ng-options="gender for gender in genders" ng-model="selectedG" ng-init="selectedG = true"></select>
+  <p>Price: {{price}}VND</p>
+  <p>Quantity: <input type="text" ng-model="quantity"/> </p>
+  <p> Subtotal: ${{empInsurance()}}</p>
+  <p> VAT: ${{incomeTax()}}</p>
+  <div ng-switch on="selectedD">
+    <div ng-switch-when="Nâu Đá"></div>
+    <div ng-switch-when="Capuchino"></div>
+    <div ng-switch-when="Bạc Xỉu"></div>
+  </div>
+  <div ng-switch on="selectedG">
+    <div ng-switch-when="M"></div>
+    <div ng-switch-when="L"></div>
+  </div>
+
+  <p> Your final salary is: ${{totalSalary().toFixed(2)}}</p>
+</div>
+<script>
+  var app = angular.module('myApp', []);
+
+  app.controller('MathController', function($scope) {
+    $scope.price = 0;
+    $scope.quantity = 1;
+    $scope.genders = ['M' , 'L'];
+    $scope.selectedG = $scope.genders[0];
+    $scope.dependants = ['Nâu Đá', 'Capuchino', 'Bạc Xỉu'];
+    $scope.selectedD = $scope.dependants[0];
+    $scope.empInsurance = function() {
+
+      return (Number($scope.quantity) * (Number($scope.price)));
+    }
+
+    $scope.incomeTax = function() {
+
+      if ($scope.selectedG == "L") {
+        switch($scope.selectedD) {
+          case "Nâu Đá": $scope.price = 25000;
+            break;
+          case "Capuchino": $scope.price = 20000;
+            break;
+          case "Bạc Xỉu": $scope.price = 30000;
+            break;
+        }
+      } else {
+        switch($scope.selectedD) {
+          case "Nâu Đá": $scope.price = 20000;
+            break;
+          case "Capuchino": $scope.price = 15000;
+            break;
+          case "Bạc Xỉu": $scope.price = 25000;
+            break;
+        }
+      }
+      return (Number($scope.quantity) * (Number($scope.price) * 0.1))
+
+    }
+    $scope.totalSalary = function(){
+      return (Number($scope.quantity) * (Number($scope.price))) + (Number($scope.quantity) * (Number($scope.price) * 0.1));
+    }
+  });
+</script>
+
+</body>
+</html>
